@@ -7,6 +7,7 @@ use url::Url;
 pub mod youtube;
 pub mod twitter;
 pub mod direct;
+pub mod local;
 
 use crate::Result;
 
@@ -130,6 +131,11 @@ impl ExtractorRegistry {
         registry
     }
     
+    /// Create local file extractor (not stored in registry since it's handled differently)
+    pub fn create_local_extractor() -> local::LocalFileExtractor {
+        local::LocalFileExtractor::new()
+    }
+    
     /// Register a new extractor
     pub fn register(&mut self, extractor: Box<dyn MediaExtractor>) {
         self.extractors.push(extractor);
@@ -151,13 +157,41 @@ impl ExtractorRegistry {
             .collect()
     }
     
-    /// Extract audio info using the appropriate extractor
-    pub async fn extract_audio_info(&self, url: &str) -> Result<AudioInfo> {
-        let extractor = self
-            .find_extractor(url)
-            .ok_or_else(|| anyhow::anyhow!("No extractor found for URL: {}", url))?;
+    /// Check if input is a local file path
+    pub fn is_local_file(&self, input: &str) -> bool {
+        // First, check if it's clearly a URL
+        if input.starts_with("http://") || input.starts_with("https://") {
+            return false;
+        }
         
-        extractor.extract_audio_info(url).await
+        // Check if the file exists (handles both absolute and relative paths)
+        let path = std::path::Path::new(input);
+        if path.exists() {
+            return true;
+        }
+        
+        // Check if it looks like a file path (has file extension or path separators)
+        let has_extension = path.extension().is_some();
+        let has_path_separators = input.contains('/') || input.contains('\\');
+        let starts_with_dot = input.starts_with("./") || input.starts_with(".\\");
+        
+        has_extension || has_path_separators || starts_with_dot
+    }
+    
+    /// Extract audio info using the appropriate extractor
+    pub async fn extract_audio_info(&self, input: &str) -> Result<AudioInfo> {
+        // Check if it's a local file
+        if self.is_local_file(input) {
+            let local_extractor = Self::create_local_extractor();
+            return local_extractor.extract_audio_info(input).await;
+        }
+        
+        // Handle as URL
+        let extractor = self
+            .find_extractor(input)
+            .ok_or_else(|| anyhow::anyhow!("No extractor found for URL: {}", input))?;
+        
+        extractor.extract_audio_info(input).await
     }
 }
 

@@ -79,6 +79,8 @@ async fn main() -> Result<()> {
             println!("  • YouTube (youtube.com, youtu.be)");
             println!("  • Twitter/X (twitter.com, x.com)");
             println!("  • Direct audio/video URLs");
+            println!("  • Local audio files (mp3, m4a, wav, flac, ogg)");
+            println!("  • Local video files (mp4, mkv, avi, mov, wmv, etc.)");
             println!("  • More platforms coming soon!");
         }
     }

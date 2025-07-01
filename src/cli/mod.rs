@@ -23,10 +23,10 @@ pub struct Cli {
 
 #[derive(Subcommand)]
 pub enum Commands {
-    /// Transcribe audio from a URL
+    /// Transcribe audio from a URL or local file
     Transcribe {
-        /// URL to transcribe (YouTube, Twitter, direct media, etc.)
-        #[arg(value_name = "URL")]
+        /// URL or file path to transcribe (YouTube, Twitter, direct media, or local audio/video files)
+        #[arg(value_name = "URL_OR_FILE")]
         url: String,
 
         /// Output file path (prints to console if not specified)

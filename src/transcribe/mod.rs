@@ -201,6 +201,26 @@ impl TranscriptionPipeline {
             return Ok(audio_path);
         }
         
+        // Check if this is a local file
+        if audio_info.download_url.starts_with("local-file://") {
+            // Use local file processing
+            let local_file_path = &audio_info.download_url[12..]; // Remove "local-file://" prefix
+            let local_extractor = crate::extractors::local::LocalFileExtractor::new();
+            
+            let progress = ProgressBar::new_spinner();
+            progress.set_style(ProgressStyle::default_spinner()
+                .template("{spinner:.green} [{elapsed_precise}] {msg}")
+                .unwrap()
+            );
+            progress.set_message("Processing local audio file...");
+            
+            // Process the local file (copy or convert as needed)
+            local_extractor.prepare_audio(std::path::Path::new(local_file_path), &audio_path).await?;
+            
+            progress.finish_with_message("File processing complete");
+            return Ok(audio_path);
+        }
+        
         // Create progress bar for regular downloads
         let progress = ProgressBar::new(audio_info.file_size.unwrap_or(0));
         progress.set_style(

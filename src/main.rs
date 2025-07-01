@@ -25,6 +25,13 @@ async fn main() -> Result<()> {
         .init();
 
     let cli = Cli::parse();
+    
+    // Check for required external dependencies
+    if let Err(e) = utils::check_dependencies() {
+        eprintln!("⚠️  {}", e);
+        std::process::exit(1);
+    }
+    
     let config = Config::load().await?;
 
     match cli.command {

@@ -26,10 +26,14 @@ async fn main() -> Result<()> {
 
     let cli = Cli::parse();
     
-    // Check for required external dependencies
-    if let Err(e) = utils::check_dependencies() {
-        eprintln!("⚠️  {}", e);
-        std::process::exit(1);
+    // Check for required external dependencies (non-fatal in Docker)
+    let missing_deps = utils::check_dependencies().await;
+    if !missing_deps.is_empty() {
+        eprintln!("⚠️  Dependency check warnings:");
+        for dep in missing_deps {
+            eprintln!("   • {}", dep);
+        }
+        eprintln!("   (Continuing anyway - tools may be available)");
     }
     
     let config = Config::load().await?;

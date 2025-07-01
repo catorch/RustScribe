@@ -181,6 +181,26 @@ impl TranscriptionPipeline {
             return Ok(audio_path);
         }
         
+        // Check if this is a Twitter URL (twitter-dlp protocol)
+        if audio_info.download_url.starts_with("twitter-dlp://") {
+            // Use optimized Twitter download
+            let twitter_url = &audio_info.download_url[14..]; // Remove "twitter-dlp://" prefix
+            let twitter_extractor = crate::extractors::twitter::TwitterExtractor::new();
+            
+            let progress = ProgressBar::new_spinner();
+            progress.set_style(ProgressStyle::default_spinner()
+                .template("{spinner:.green} [{elapsed_precise}] {msg}")
+                .unwrap()
+            );
+            progress.set_message("Downloading Twitter/X audio with yt-dlp (optimized)...");
+            
+            // Let yt-dlp handle the download directly
+            twitter_extractor.download_audio_direct(twitter_url, &audio_path).await?;
+            
+            progress.finish_with_message("Download complete");
+            return Ok(audio_path);
+        }
+        
         // Create progress bar for regular downloads
         let progress = ProgressBar::new(audio_info.file_size.unwrap_or(0));
         progress.set_style(

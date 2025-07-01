@@ -57,15 +57,24 @@ impl TwitterExtractor {
         Ok(info)
     }
     
-    /// Extract the best audio format URL
-    async fn get_audio_url(&self, url: &str) -> Result<String> {
-        tracing::debug!("Getting audio URL for Twitter content: {}", url);
+    /// Download audio directly using yt-dlp (similar to YouTube approach)
+    pub async fn download_audio_direct(&self, url: &str, output_path: &std::path::Path) -> Result<AudioFormat> {
+        tracing::debug!("Downloading Twitter audio directly for: {}", url);
         
         let output = Command::new(&self.yt_dlp_path)
             .args([
-                "--get-url",
-                "--format", "bestaudio/best",
+                // Output to specific file
+                "--output", &output_path.to_string_lossy(),
+                // Extract audio in the most efficient format for transcription
+                "--extract-audio",
+                "--audio-format", "mp3",
+                "--audio-quality", "9",  // Lowest quality for speed (still good for transcription)
+                // Better Twitter audio selection
+                "--format", "hls-audio-32000-Audio/bestaudio[ext=m4a]/bestaudio[ext=mp4]/bestaudio/best[height<=720]",
                 "--no-playlist",
+                // Performance optimizations
+                "--concurrent-fragments", "4",
+                "--newline",
                 url,
             ])
             .stdout(Stdio::piped())
@@ -75,14 +84,20 @@ impl TwitterExtractor {
             
         if !output.status.success() {
             let error = String::from_utf8_lossy(&output.stderr);
-            anyhow::bail!("Failed to get audio URL from Twitter: {}", error);
+            
+            // Check for common Twitter errors
+            if error.contains("No video could be found") {
+                anyhow::bail!("This tweet does not contain any video or audio content");
+            } else if error.contains("Private") || error.contains("protected") {
+                anyhow::bail!("This tweet is private or protected");
+            } else if error.contains("not found") || error.contains("404") {
+                anyhow::bail!("Tweet not found or has been deleted");
+            }
+            
+            anyhow::bail!("Failed to download audio from Twitter: {}", error);
         }
         
-        let audio_url = String::from_utf8(output.stdout)?
-            .trim()
-            .to_string();
-            
-        Ok(audio_url)
+        Ok(AudioFormat::Mp3) // We're forcing MP3 conversion for speed
     }
 }
 
@@ -114,15 +129,12 @@ impl MediaExtractor for TwitterExtractor {
         let duration_seconds = info["duration"].as_f64();
         let duration = duration_seconds.map(|d| Duration::seconds(d as i64));
         
-        // Get the audio download URL
-        let download_url = self.get_audio_url(url).await?;
+        // For Twitter, we'll use direct download, so we use a placeholder URL
+        // The actual download will be handled by download_audio_direct()
+        let download_url = format!("twitter-dlp://{}", url);
         
-        // Twitter videos are typically MP4, so we'll extract audio as MP3
-        let format = if download_url.contains(".m4a") {
-            AudioFormat::M4a
-        } else {
-            AudioFormat::Mp3 // Default conversion for Twitter
-        };
+        // We'll always convert to MP3 for speed and compatibility
+        let format = AudioFormat::Mp3;
         
         Ok(AudioInfo {
             download_url,
@@ -130,7 +142,7 @@ impl MediaExtractor for TwitterExtractor {
             title,
             format,
             sample_rate: Some(44100),
-            file_size: None,
+            file_size: None, // Will be determined during download
             original_url: url.to_string(),
         })
     }

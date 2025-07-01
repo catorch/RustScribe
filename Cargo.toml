@@ -1,15 +1,15 @@
 resolver = "2"
 
 [package]
-name = "universal-transcriptor"
+name = "rustscribe"
 version = "0.1.0"
 edition = "2021"
 authors = ["Your Name <your.email@example.com>"]
 description = "A Rust CLI tool for transcribing audio from YouTube, Twitter, and other platforms using AWS Transcribe"
 license = "MIT"
-repository = "https://github.com/yourusername/universal-transcriptor"
-homepage = "https://github.com/yourusername/universal-transcriptor"
-documentation = "https://docs.rs/universal-transcriptor"
+repository = "https://github.com/yourusername/rustscribe"
+homepage = "https://github.com/yourusername/rustscribe"
+documentation = "https://docs.rs/rustscribe"
 keywords = ["transcription", "aws", "youtube", "cli", "audio"]
 categories = ["command-line-utilities", "multimedia::audio"]
 readme = "README.md"

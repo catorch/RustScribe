@@ -134,7 +134,7 @@ impl Config {
         let config_dir = dirs::config_dir()
             .context("Could not determine config directory")?;
         
-        Ok(config_dir.join("universal-transcriptor").join("config.yaml"))
+        Ok(config_dir.join("rustscribe").join("config.yaml"))
     }
     
     /// Validate configuration

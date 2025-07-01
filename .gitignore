@@ -1,0 +1,65 @@
+# Rust
+/target/
+**/*.rs.bk
+*.pdb
+
+# Cargo
+Cargo.lock
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Configuration (contains sensitive data)
+config.yaml
+.env
+.env.local
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.temp
+
+# Audio files (from testing)
+*.mp3
+*.m4a
+*.wav
+*.flac
+*.ogg
+*.webm
+
+# Output files (from testing)
+*.srt
+*.vtt
+transcripts/
+output/
+
+# Build artifacts
+dist/
+build/
+
+# Coverage
+tarpaulin-report.html
+cobertura.xml
+lcov.info
+
+# Flamegraph
+flamegraph.svg
+perf.data* 

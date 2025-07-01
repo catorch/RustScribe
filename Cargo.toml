@@ -1,0 +1,86 @@
+[package]
+name = "universal-transcriptor"
+version = "0.1.0"
+edition = "2021"
+authors = ["Your Name <your.email@example.com>"]
+description = "A Rust CLI tool for transcribing audio from YouTube, Twitter, and other platforms using AWS Transcribe"
+license = "MIT"
+repository = "https://github.com/yourusername/universal-transcriptor"
+homepage = "https://github.com/yourusername/universal-transcriptor"
+documentation = "https://docs.rs/universal-transcriptor"
+keywords = ["transcription", "aws", "youtube", "cli", "audio"]
+categories = ["command-line-utilities", "multimedia::audio"]
+readme = "README.md"
+
+[[bin]]
+name = "transcriptor"
+path = "src/main.rs"
+
+[dependencies]
+# CLI framework
+clap = { version = "4.4", features = ["derive", "env"] }
+
+# Async runtime
+tokio = { version = "1.0", features = ["full"] }
+
+# HTTP client
+reqwest = { version = "0.11", features = ["json", "stream"] }
+
+# Serialization
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+serde_yaml = "0.9"
+
+# AWS SDK
+aws-sdk-transcribe = "1.0"
+aws-sdk-s3 = "1.0"
+aws-config = "1.0"
+aws-types = "1.0"
+
+# Error handling
+anyhow = "1.0"
+thiserror = "1.0"
+
+# Logging and tracing
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
+
+# Progress and UI
+indicatif = "0.17"
+console = "0.15"
+
+# Utilities
+uuid = { version = "1.0", features = ["v4"] }
+url = "2.5"
+tempfile = "3.8"
+dirs = "5.0"
+
+# Async traits
+async-trait = "0.1"
+
+# Date/time handling
+chrono = { version = "0.4", features = ["serde"] }
+
+# File handling
+fs-err = "2.11"
+
+# URL encoding
+urlencoding = "2.1"
+
+# Futures utilities
+futures-util = "0.3"
+
+[dev-dependencies]
+tokio-test = "0.4"
+mockall = "0.12"
+assert_cmd = "2.0"
+predicates = "3.0"
+
+[profile.release]
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true
+
+[profile.dev]
+debug = true 

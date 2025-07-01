@@ -53,11 +53,11 @@ pub enum Commands {
         #[arg(long, value_name = "COUNT")]
         max_speakers: Option<u8>,
 
-        /// Disable timestamps in text output (srt/vtt formats always include timestamps)
+        /// Include timestamps in text output (srt/vtt formats always include timestamps)
         #[arg(long)]
-        no_timestamps: bool,
+        timestamps: bool,
 
-        /// Use detailed timestamps with milliseconds
+        /// Use detailed timestamps with milliseconds (implies --timestamps)
         #[arg(long)]
         detailed_timestamps: bool,
 

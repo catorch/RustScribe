@@ -36,7 +36,7 @@ async fn main() -> Result<()> {
             save_audio,
             speaker_labels,
             max_speakers,
-            no_timestamps,
+            timestamps,
             detailed_timestamps,
             max_segment_length,
         } => {
@@ -49,13 +49,14 @@ async fn main() -> Result<()> {
                 .await?;
 
             // Handle output
+            let show_timestamps = timestamps || detailed_timestamps;
             match output {
                 Some(path) => {
-                    output::save_to_file(&result, &path, &format, !no_timestamps, detailed_timestamps).await?;
+                    output::save_to_file(&result, &path, &format, show_timestamps, detailed_timestamps).await?;
                     println!("Transcription saved to: {}", path.display());
                 }
                 None => {
-                    output::print_to_console(&result, &format, !no_timestamps, detailed_timestamps)?;
+                    output::print_to_console(&result, &format, show_timestamps, detailed_timestamps)?;
                 }
             }
 

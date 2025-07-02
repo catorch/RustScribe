@@ -56,7 +56,7 @@ async fn main() -> Result<()> {
             tracing::info!("Starting transcription for URL: {}", url);
             
             let result = pipeline
-                .transcribe_from_url(&url, language.as_deref(), speaker_labels, max_speakers, max_segment_length)
+                .transcribe_from_url(&url, language.as_deref(), speaker_labels, max_speakers, max_segment_length, save_audio)
                 .await?;
 
             // Handle output

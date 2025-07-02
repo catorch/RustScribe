@@ -1,4 +1,4 @@
-//! Universal Transcriptor - A Rust CLI tool for transcribing media from various platforms
+//! RustScribe - A Rust CLI tool for transcribing media from various platforms
 //! 
 //! This library provides functionality to extract and transcribe audio from platforms like
 //! YouTube, Twitter/X, and direct media URLs using AWS Transcribe service.

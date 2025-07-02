@@ -114,7 +114,7 @@ pub fn format_as_vtt(result: &TranscriptionResult, detailed_timestamps: bool) ->
     let mut output = String::from("WEBVTT\n\n");
     
     // Add metadata
-    output.push_str(&format!("NOTE\nTranscribed by Universal Transcriptor\n"));
+    output.push_str(&format!("NOTE\nTranscribed by RustScribe\n"));
     output.push_str(&format!("Source: {}\n", 
         result.audio_info.title.as_deref().unwrap_or("Unknown")));
     output.push_str(&format!("Language: {}\n\n", result.metadata.language));

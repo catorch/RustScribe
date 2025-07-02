@@ -117,6 +117,7 @@ impl TranscriptionPipeline {
         speaker_labels: bool,
         max_speakers: Option<u8>,
         max_segment_length: f64,
+        save_audio: bool,
     ) -> Result<TranscriptionResult> {
         // Extract audio information
         tracing::info!("Extracting audio information from URL: {}", url);
@@ -137,8 +138,8 @@ impl TranscriptionPipeline {
         // Clean up S3 object
         self.cleanup_s3(&s3_key).await?;
         
-        // Preserve audio file if configured
-        let preserved_audio_path = if self.config.app.keep_audio {
+        // Preserve audio file if requested via CLI flag or configured in config
+        let preserved_audio_path = if save_audio || self.config.app.keep_audio {
             Some(self.preserve_audio_file(&audio_path, &audio_info).await?)
         } else {
             None

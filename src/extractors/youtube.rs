@@ -69,8 +69,8 @@ impl YoutubeExtractor {
                 "--extract-audio",
                 "--audio-format", "mp3",
                 "--audio-quality", "9",  // Lowest quality for speed (still good for transcription)
-                // Prioritize smaller/faster formats
-                "--format", "worstaudio[acodec^=mp4a]/worstaudio[ext=m4a]/worstaudio[ext=mp3]/worstaudio",
+                // Prioritize original language track with good quality
+                "--format", "bestaudio[acodec^=mp4a]/bestaudio[ext=m4a]/bestaudio",
                 "--no-playlist",
                 // Performance optimizations
                 "--concurrent-fragments", "4",

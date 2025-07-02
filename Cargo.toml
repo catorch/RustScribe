@@ -15,7 +15,7 @@ categories = ["command-line-utilities", "multimedia::audio"]
 readme = "README.md"
 
 [[bin]]
-name = "transcriptor"
+name = "rustscribe"
 path = "src/main.rs"
 
 [dependencies]

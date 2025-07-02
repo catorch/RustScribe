@@ -135,20 +135,20 @@ jobs:
         mkdir -p release
         
         if [[ "${{ runner.os }}" == "Windows" ]]; then
-          cp target/${{ matrix.target }}/release/transcriptor.exe release/
+          cp target/${{ matrix.target }}/release/rustscribe.exe release/
           cd release
-          7z a ../transcriptor-${{ matrix.name }}.zip transcriptor.exe
+          7z a ../rustscribe-${{ matrix.name }}.zip rustscribe.exe
         else
-          cp target/${{ matrix.target }}/release/transcriptor release/
+          cp target/${{ matrix.target }}/release/rustscribe release/
           cd release
-          tar czf ../transcriptor-${{ matrix.name }}.tar.gz transcriptor
+          tar czf ../rustscribe-${{ matrix.name }}.tar.gz rustscribe
         fi
         
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
-        name: transcriptor-${{ matrix.name }}
-        path: transcriptor-${{ matrix.name }}.*
+        name: rustscribe-${{ matrix.name }}
+        path: rustscribe-${{ matrix.name }}.*
         
   # Test built binaries
   test-binaries:
@@ -162,14 +162,14 @@ jobs:
     - name: Download Linux binary
       uses: actions/download-artifact@v4
       with:
-        name: transcriptor-linux-x86_64
+        name: rustscribe-linux-x86_64
         
     - name: Test binary
       run: |
-        tar xzf transcriptor-linux-x86_64.tar.gz
-        chmod +x transcriptor
-        ./transcriptor --version
-        ./transcriptor --help
+        tar xzf rustscribe-linux-x86_64.tar.gz
+        chmod +x rustscribe
+        ./rustscribe --version
+        ./rustscribe --help
         
   # Release Jobs (only on tags)
   release:
@@ -188,11 +188,11 @@ jobs:
       uses: softprops/action-gh-release@v1
       with:
         files: |
-          transcriptor-linux-x86_64/transcriptor-linux-x86_64.tar.gz
-          transcriptor-linux-arm64/transcriptor-linux-arm64.tar.gz
-          transcriptor-macos-x86_64/transcriptor-macos-x86_64.tar.gz
-          transcriptor-macos-arm64/transcriptor-macos-arm64.tar.gz
-          transcriptor-windows-x86_64/transcriptor-windows-x86_64.zip
+          rustscribe-linux-x86_64/rustscribe-linux-x86_64.tar.gz
+          rustscribe-linux-arm64/rustscribe-linux-arm64.tar.gz
+          rustscribe-macos-x86_64/rustscribe-macos-x86_64.tar.gz
+          rustscribe-macos-arm64/rustscribe-macos-arm64.tar.gz
+          rustscribe-windows-x86_64/rustscribe-windows-x86_64.zip
         draft: false
         prerelease: false
         generate_release_notes: true

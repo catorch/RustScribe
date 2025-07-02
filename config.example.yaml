@@ -1,0 +1,76 @@
+# RustScribe Configuration Example
+# Copy this file to ~/.config/rustscribe/config.yaml and update with your settings
+
+aws:
+  # AWS credentials (alternatively use AWS CLI, environment variables, or IAM roles)
+  access_key_id: "your-aws-access-key-id"
+  secret_access_key: "your-aws-secret-access-key"
+  
+  # AWS region where your S3 bucket and Transcribe service are located
+  region: "us-east-1"
+  
+  # S3 bucket for temporary audio file storage during transcription
+  # Make sure this bucket exists and you have read/write permissions
+  s3_bucket: "your-transcription-bucket"
+  
+  # Optional: prefix for S3 keys (helps organize files)
+  s3_key_prefix: "transcriptions/"
+
+app:
+  # Whether to keep audio files after transcription (default: false)
+  keep_audio: false
+  
+  # Default language for transcription (null = auto-detect)
+  # Examples: "en-US", "es-ES", "fr-FR", "de-DE", "ja-JP"
+  default_language: null
+  
+  # Maximum number of concurrent transcription jobs (default: 3)
+  max_concurrent_jobs: 3
+  
+  # Default output format when not specified
+  # Options: text, json, srt, vtt, csv
+  default_output_format: "text"
+  
+  # Directory for temporary files (null = system default)
+  temp_dir: null
+
+# Transcription settings
+transcription:
+  # Default audio format for processing (mp3 recommended for speed)
+  media_format: "mp3"
+  
+  # Sample rate for audio processing (Hz)
+  # Higher = better quality, lower = faster processing
+  sample_rate: 44100
+  
+  # Enable speaker identification by default
+  speaker_identification: false
+  
+  # Maximum number of speakers to identify (2-10)
+  max_speakers: 2
+  
+  # Default segment length for timestamps (seconds)
+  # Lower = more frequent timestamps, higher = fewer timestamps
+  max_segment_length: 10.0
+
+# External tool configurations
+tools:
+  # Path to yt-dlp binary (null = search in PATH)
+  yt_dlp_path: null
+  
+  # Path to ffmpeg binary (null = search in PATH)
+  ffmpeg_path: null
+  
+  # Path to ffprobe binary (null = search in PATH)
+  ffprobe_path: null
+
+# Logging configuration
+logging:
+  # Log level: error, warn, info, debug, trace
+  level: "info"
+  
+  # Log to file (null = console only)
+  file: null
+  
+  # Enable JSON logging format
+  json: false 

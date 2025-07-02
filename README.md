@@ -83,7 +83,9 @@ graph LR
 
 ```bash
 # 1. install (choose one)
-cargo install rustscribe                # builds from source
+git clone https://github.com/yourusername/rustscribe.git
+cd rustscribe
+cargo install --path .                  # builds and installs from source
 # or download a binary from Releases page and place it in $PATH
 
 # 2. configure AWS (one‑time)
@@ -149,8 +151,16 @@ pip3 install yt-dlp
 # Rust (if needed)
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
-# RustScribe
-cargo install rustscribe
+# RustScribe (download pre-built binary or build from source)
+# Option 1: Download binary
+wget https://github.com/yourusername/rustscribe/releases/latest/download/rustscribe-linux-x86_64.tar.gz
+tar -xzf rustscribe-linux-x86_64.tar.gz
+sudo mv rustscribe /usr/local/bin/
+
+# Option 2: Build from source
+git clone https://github.com/yourusername/rustscribe.git
+cd rustscribe
+cargo install --path .
 ```
 
 **macOS:**
@@ -161,8 +171,21 @@ brew install ffmpeg yt-dlp
 # Rust (if needed)
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
-# RustScribe
-cargo install rustscribe
+# RustScribe (download pre-built binary or build from source)
+# Option 1: Download binary (Intel)
+wget https://github.com/yourusername/rustscribe/releases/latest/download/rustscribe-macos-x86_64.tar.gz
+tar -xzf rustscribe-macos-x86_64.tar.gz
+sudo mv rustscribe /usr/local/bin/
+
+# Option 1b: Download binary (Apple Silicon)
+wget https://github.com/yourusername/rustscribe/releases/latest/download/rustscribe-macos-arm64.tar.gz
+tar -xzf rustscribe-macos-arm64.tar.gz
+sudo mv rustscribe /usr/local/bin/
+
+# Option 2: Build from source
+git clone https://github.com/yourusername/rustscribe.git
+cd rustscribe
+cargo install --path .
 ```
 
 **Windows (PowerShell as Administrator):**
@@ -173,8 +196,17 @@ choco install ffmpeg python yt-dlp
 # Rust (if needed)
 # Download and run rustup-init.exe from https://rustup.rs/
 
-# RustScribe
-cargo install rustscribe
+# RustScribe (download pre-built binary or build from source)
+# Option 1: Download binary
+Invoke-WebRequest -Uri "https://github.com/yourusername/rustscribe/releases/latest/download/rustscribe-windows-x86_64.zip" -OutFile "rustscribe.zip"
+Expand-Archive -Path "rustscribe.zip" -DestinationPath "."
+Move-Item "rustscribe.exe" "$env:ProgramFiles\rustscribe.exe"
+$env:PATH += ";$env:ProgramFiles"
+
+# Option 2: Build from source
+git clone https://github.com/yourusername/rustscribe.git
+cd rustscribe
+cargo install --path .
 ```
 
 ### ✅ **Verify Installation**

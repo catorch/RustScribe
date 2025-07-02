@@ -49,7 +49,6 @@ temp/
 *.srt
 *.vtt
 transcripts/
-output/
 
 # Build artifacts
 dist/

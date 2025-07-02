@@ -4,7 +4,7 @@
   <img src="rustscribe.png" alt="RustScribe Logo" width="200">
 </div>
 
-[![CI](https://github.com/yourusername/rustscribe/actions/workflows/release.yml/badge.svg)](https://github.com/yourusername/rustscribe/actions/workflows/release.yml)
+[![CI](https://github.com/catorch/RustScribe/actions/workflows/release.yml/badge.svg)](https://github.com/catorch/RustScribe/actions/workflows/release.yml)
 [![Crates.io](https://img.shields.io/crates/v/rustscribe)](https://crates.io/crates/rustscribe)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 ![platforms](https://img.shields.io/badge/platform-linux%20|%20macOS%20|%20windows-blue)
@@ -83,8 +83,8 @@ graph LR
 
 ```bash
 # 1. install (choose one)
-git clone https://github.com/yourusername/rustscribe.git
-cd rustscribe
+git clone https://github.com/catorch/RustScribe.git
+cd RustScribe
 cargo install --path .                  # builds and installs from source
 # or download a binary from Releases page and place it in $PATH
 
@@ -153,13 +153,13 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
 # RustScribe (download pre-built binary or build from source)
 # Option 1: Download binary
-wget https://github.com/yourusername/rustscribe/releases/latest/download/rustscribe-linux-x86_64.tar.gz
+wget https://github.com/catorch/RustScribe/releases/latest/download/rustscribe-linux-x86_64.tar.gz
 tar -xzf rustscribe-linux-x86_64.tar.gz
 sudo mv rustscribe /usr/local/bin/
 
 # Option 2: Build from source
-git clone https://github.com/yourusername/rustscribe.git
-cd rustscribe
+git clone https://github.com/catorch/RustScribe.git
+cd RustScribe
 cargo install --path .
 ```
 
@@ -173,18 +173,18 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
 # RustScribe (download pre-built binary or build from source)
 # Option 1: Download binary (Intel)
-wget https://github.com/yourusername/rustscribe/releases/latest/download/rustscribe-macos-x86_64.tar.gz
+wget https://github.com/catorch/RustScribe/releases/latest/download/rustscribe-macos-x86_64.tar.gz
 tar -xzf rustscribe-macos-x86_64.tar.gz
 sudo mv rustscribe /usr/local/bin/
 
 # Option 1b: Download binary (Apple Silicon)
-wget https://github.com/yourusername/rustscribe/releases/latest/download/rustscribe-macos-arm64.tar.gz
+wget https://github.com/catorch/RustScribe/releases/latest/download/rustscribe-macos-arm64.tar.gz
 tar -xzf rustscribe-macos-arm64.tar.gz
 sudo mv rustscribe /usr/local/bin/
 
 # Option 2: Build from source
-git clone https://github.com/yourusername/rustscribe.git
-cd rustscribe
+git clone https://github.com/catorch/RustScribe.git
+cd RustScribe
 cargo install --path .
 ```
 
@@ -198,14 +198,14 @@ choco install ffmpeg python yt-dlp
 
 # RustScribe (download pre-built binary or build from source)
 # Option 1: Download binary
-Invoke-WebRequest -Uri "https://github.com/yourusername/rustscribe/releases/latest/download/rustscribe-windows-x86_64.zip" -OutFile "rustscribe.zip"
+Invoke-WebRequest -Uri "https://github.com/catorch/RustScribe/releases/latest/download/rustscribe-windows-x86_64.zip" -OutFile "rustscribe.zip"
 Expand-Archive -Path "rustscribe.zip" -DestinationPath "."
 Move-Item "rustscribe.exe" "$env:ProgramFiles\rustscribe.exe"
 $env:PATH += ";$env:ProgramFiles"
 
 # Option 2: Build from source
-git clone https://github.com/yourusername/rustscribe.git
-cd rustscribe
+git clone https://github.com/catorch/RustScribe.git
+cd RustScribe
 cargo install --path .
 ```
 
@@ -299,7 +299,7 @@ graph TD
 
 ---
 
-## 🧰 Tech stack & what I practised
+## 🧰 Tech stack
 
 * **Rust 2021** – async/await with Tokio, error handling via `anyhow`/`thiserror`
 * **AWS SDK for Rust** – S3 + Transcribe Batch

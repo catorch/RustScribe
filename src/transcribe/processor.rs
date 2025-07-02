@@ -7,6 +7,7 @@ use std::time::Duration;
 use tokio::time::sleep;
 
 use super::{TranscriptSegment, TranscriptionMetadata};
+use crate::output::formatters::WordTimestamp;
 
 /// Processed transcription result from AWS
 #[derive(Debug, Clone)]
@@ -14,6 +15,7 @@ pub struct ProcessedTranscription {
     pub transcript: String,
     pub segments: Vec<TranscriptSegment>,
     pub metadata: TranscriptionMetadata,
+    pub words: Option<Vec<WordTimestamp>>,
 }
 
 /// AWS Transcribe transcript format
@@ -182,7 +184,7 @@ impl TranscriptionProcessor {
             .unwrap_or_default();
             
         // Process segments with timestamps
-        let segments = self.process_segments(&aws_transcript.results)?;
+        let (segments, words) = self.process_segments(&aws_transcript.results)?;
         
         // Create metadata
         let metadata = TranscriptionMetadata {
@@ -200,6 +202,7 @@ impl TranscriptionProcessor {
             transcript,
             segments,
             metadata,
+            words: Some(words),
         })
     }
     
@@ -218,11 +221,31 @@ impl TranscriptionProcessor {
         Ok(content)
     }
     
-    /// Process transcript items into segments
-    fn process_segments(&self, results: &TranscriptResults) -> Result<Vec<TranscriptSegment>> {
+    /// Process transcript items into segments and extract word-level timestamps
+    fn process_segments(&self, results: &TranscriptResults) -> Result<(Vec<TranscriptSegment>, Vec<WordTimestamp>)> {
         let mut segments = Vec::new();
+        let mut words = Vec::new();
         
-        // Group items into meaningful segments
+        // First pass: extract all word-level timestamps
+        for item in &results.items {
+            if item.item_type == "pronunciation" {
+                if let (Some(start_str), Some(end_str)) = (&item.start_time, &item.end_time) {
+                    if let (Ok(start_time), Ok(end_time)) = (start_str.parse::<f64>(), end_str.parse::<f64>()) {
+                        if let Some(alt) = item.alternatives.first() {
+                            words.push(WordTimestamp {
+                                word: alt.content.clone(),
+                                start_time,
+                                end_time,
+                                confidence: alt.confidence.as_ref().and_then(|c| c.parse::<f64>().ok()),
+                                speaker_id: item.speaker_label.clone(),
+                            });
+                        }
+                    }
+                }
+            }
+        }
+        
+        // Second pass: group words into segments (existing logic)
         let mut current_segment_text = String::new();
         let mut current_start_time: Option<f64> = None;
         let mut current_end_time: Option<f64> = None;
@@ -247,19 +270,16 @@ impl TranscriptionProcessor {
                 // Start new segment if speaker changes, significant gap, or segment is getting too long
                 let speaker_changed = current_speaker.as_ref() != item.speaker_label.as_ref();
                 let time_gap = start_time.zip(current_end_time)
-                    .map(|(start, end)| start - end > 1.0) // 1-second gap (more sensitive)
+                    .map(|(start, end)| start - end > 1.0)
                     .unwrap_or(false);
                     
-                // Also split if current segment is getting too long
                 let segment_too_long = current_start_time.zip(start_time)
                     .map(|(seg_start, current)| current - seg_start > self.max_segment_length)
                     .unwrap_or(false);
                     
-                // Split on punctuation boundaries for natural breaks
                 let natural_break = content.ends_with('.') || content.ends_with('!') || content.ends_with('?');
                     
-                // Split segment if any condition is met
-                let min_natural_break_length = self.max_segment_length / 2.0; // Allow natural breaks after half the max length
+                let min_natural_break_length = self.max_segment_length / 2.0;
                 let should_split = speaker_changed || time_gap || segment_too_long || 
                     (natural_break && current_start_time.zip(start_time).map(|(seg_start, current)| current - seg_start > min_natural_break_length).unwrap_or(false)) ||
                     current_segment_text.is_empty();
@@ -317,7 +337,7 @@ impl TranscriptionProcessor {
             }
         }
         
-        Ok(segments)
+        Ok((segments, words))
     }
     
     /// Calculate average confidence from a list

@@ -125,12 +125,13 @@ impl Config {
     
     /// Get configuration file path
     fn config_path() -> Result<PathBuf> {
-        // First try current directory for easy testing
-        let local_config = PathBuf::from("config.yaml");
-        if local_config.exists() {
-            return Ok(local_config);
+        // First try .config directory for project-specific settings
+        let project_config = PathBuf::from(".config").join("rustscribe.yaml");
+        if project_config.exists() {
+            return Ok(project_config);
         }
         
+        // Then try system config directory for user-specific settings
         let config_dir = dirs::config_dir()
             .context("Could not determine config directory")?;
         

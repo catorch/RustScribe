@@ -29,6 +29,9 @@ pub struct TranscriptionResult {
     
     /// Transcription metadata
     pub metadata: TranscriptionMetadata,
+    
+    /// Word-level timestamps (if available)
+    pub words: Option<Vec<crate::output::formatters::WordTimestamp>>,
 }
 
 /// Individual transcript segment with timing
@@ -147,6 +150,7 @@ impl TranscriptionPipeline {
             audio_info,
             audio_path: preserved_audio_path,
             metadata: result.metadata,
+            words: result.words,
         })
     }
     

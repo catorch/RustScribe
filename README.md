@@ -89,9 +89,20 @@ cargo install --path .                  # builds and installs from source
 # or download a binary from Releases page and place it in $PATH
 
 # 2. configure AWS (one‑time)
+# For macOS:
+mkdir -p ~/Library/Application\ Support/rustscribe && \
+cp config.example.yaml ~/Library/Application\ Support/rustscribe/config.yaml
+$EDITOR ~/Library/Application\ Support/rustscribe/config.yaml  # set AWS keys, region & S3 bucket
+
+# For Linux:
 mkdir -p ~/.config/rustscribe && \
 cp config.example.yaml ~/.config/rustscribe/config.yaml
 $EDITOR ~/.config/rustscribe/config.yaml  # set AWS keys, region & S3 bucket
+
+# For Windows (PowerShell):
+mkdir -Force $env:APPDATA\rustscribe
+cp config.example.yaml $env:APPDATA\rustscribe\config.yaml
+notepad $env:APPDATA\rustscribe\config.yaml  # set AWS keys, region & S3 bucket
 
 # 3. transcribe something
 rustscribe "https://youtu.be/dQw4w9WgXcQ" -o video.srt --timestamps
@@ -135,8 +146,32 @@ cargo --version
 2. **AWS Credentials** (choose one method):
    - **Environment variables**: `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`
    - **AWS CLI**: `aws configure`
-   - **Config file**: `~/.config/rustscribe/config.yaml`
+   - **Config file**: See Configuration section below
    - **IAM role** (for EC2/ECS)
+
+### ⚙️ **Configuration**
+
+RustScribe supports multiple configuration locations, loaded in the following order (highest priority first):
+
+1. **Command-line arguments**
+2. **Environment variables**:
+   - `AWS_ACCESS_KEY_ID`
+   - `AWS_SECRET_ACCESS_KEY`
+   - `AWS_REGION`
+3. **Project-local config** (for development/testing):
+   - `.config/rustscribe.yaml`
+4. **User-specific config** (for global settings):
+   - macOS: `~/Library/Application Support/rustscribe/config.yaml`
+   - Linux: `~/.config/rustscribe/config.yaml`
+   - Windows: `%APPDATA%\rustscribe\config.yaml`
+
+This hierarchy allows you to:
+- Keep sensitive AWS credentials in your user config
+- Override settings for specific projects
+- Use different settings in CI/CD environments
+- Test with different configurations
+
+See `config.example.yaml` for all available settings and their descriptions.
 
 ### 🛠️ **Quick Install Scripts**
 

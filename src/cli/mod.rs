@@ -3,8 +3,8 @@ use std::path::PathBuf;
 
 #[derive(Parser)]
 #[command(
-    name = "transcriptor",
-    about = "Universal Transcriptor - Extract transcripts from YouTube, Twitter, and more using AWS Transcribe",
+    name = "rustscribe",
+    about = "RustScribe - Turn YouTube, Twitter/X or local media into timestamped, speaker-labelled transcripts",
     version,
     long_about = "A powerful CLI tool for transcribing audio from various platforms including YouTube, Twitter/X, and direct media URLs. Uses AWS Transcribe for high-quality speech-to-text conversion."
 )]

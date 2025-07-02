@@ -1,5 +1,12 @@
 # RustScribe Configuration Example
-# Copy this file to ~/.config/rustscribe/config.yaml and update with your settings
+#
+# For user-specific settings (AWS credentials, etc.), copy this file to:
+#   - macOS: ~/Library/Application Support/rustscribe/config.yaml
+#   - Linux: ~/.config/rustscribe/config.yaml
+#   - Windows: %APPDATA%\rustscribe\config.yaml
+#
+# For project-specific settings, copy to:
+#   - .config/rustscribe.yaml
 
 aws:
   # AWS credentials (alternatively use AWS CLI, environment variables, or IAM roles)
@@ -15,6 +22,24 @@ aws:
   
   # Optional: prefix for S3 keys (helps organize files)
   s3_key_prefix: "transcriptions/"
+
+  # Transcription settings
+  transcription:
+    # Default language for transcription (null = auto-detect)
+    default_language: null
+    
+    # Default audio format for processing (mp3 recommended for speed)
+    media_format: "mp3"
+    
+    # Sample rate for audio processing (Hz)
+    # Higher = better quality, lower = faster processing
+    sample_rate: 44100
+    
+    # Enable speaker identification by default
+    speaker_identification: false
+    
+    # Maximum number of speakers to identify (2-10)
+    max_speakers: 2
 
 app:
   # Whether to keep audio files after transcription (default: false)
@@ -33,25 +58,6 @@ app:
   
   # Directory for temporary files (null = system default)
   temp_dir: null
-
-# Transcription settings
-transcription:
-  # Default audio format for processing (mp3 recommended for speed)
-  media_format: "mp3"
-  
-  # Sample rate for audio processing (Hz)
-  # Higher = better quality, lower = faster processing
-  sample_rate: 44100
-  
-  # Enable speaker identification by default
-  speaker_identification: false
-  
-  # Maximum number of speakers to identify (2-10)
-  max_speakers: 2
-  
-  # Default segment length for timestamps (seconds)
-  # Lower = more frequent timestamps, higher = fewer timestamps
-  max_segment_length: 10.0
 
 # External tool configurations
 tools:

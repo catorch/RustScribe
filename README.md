@@ -14,6 +14,58 @@
 
 ---
 
+## 🌟 What is RustScribe?
+
+RustScribe is a powerful command-line tool that automatically transcribes audio content from various sources into accurate, timestamped text. Whether you're a researcher analyzing interviews, a content creator generating subtitles, or a developer building accessibility features, RustScribe streamlines the transcription process into a single command.
+
+### 🎯 **The Problem It Solves**
+
+Manual transcription is tedious and time-consuming. Existing solutions are often:
+- **Platform-locked** (YouTube-only, etc.)
+- **Expensive** for regular use
+- **Manual** (upload files, wait, download)
+- **Inaccurate** without proper timestamps or speaker detection
+
+### 💡 **The RustScribe Solution**
+
+1. **Universal Input**: Works with YouTube videos, Twitter/X posts, direct media URLs, or local files
+2. **Cloud-Grade Quality**: Uses AWS Transcribe for professional-level accuracy
+3. **Rich Output**: Generates timestamped transcripts with optional speaker identification
+4. **Developer-Friendly**: Simple CLI that integrates into workflows and scripts
+5. **Cost-Effective**: Pay only for what you use (AWS free tier covers 60 minutes/month)
+
+### 🔄 **How It Works**
+
+```mermaid
+graph LR
+    A[Input Source] --> B[Extract Audio]
+    B --> C[Upload to S3]
+    C --> D[AWS Transcribe]
+    D --> E[Process Results]
+    E --> F[Formatted Output]
+    
+    A1[YouTube URL] --> A
+    A2[Local File] --> A
+    A3[Twitter/X Post] --> A
+    
+    F --> F1[Plain Text]
+    F --> F2[SRT Subtitles]
+    F --> F3[JSON with Metadata]
+    F --> F4[VTT/CSV]
+```
+
+### 🚀 **Why Choose RustScribe?**
+
+- **⚡ Performance**: Built in Rust for speed and reliability
+- **🎯 Accuracy**: AWS Transcribe provides industry-leading speech recognition
+- **🔧 Flexibility**: Multiple output formats for different use cases
+- **👥 Speaker Detection**: Automatically identifies who said what (2-10 speakers)
+- **⏱️ Precise Timing**: Millisecond-accurate timestamps for perfect synchronization
+- **🌍 Multi-Language**: Supports auto-detection and 50+ languages
+- **💻 Cross-Platform**: Works on Linux, macOS, and Windows
+
+---
+
 ## ✨ Features (implemented today)
 
 |                                |                                                                             |
@@ -43,6 +95,99 @@ $EDITOR ~/.config/rustscribe/config.yaml  # set AWS keys, region & S3 bucket
 ```
 
 **Cost notice:** AWS offers 60 transcription minutes / month free for the first 12 months. After that it's about \$0.024 per audio‑minute.
+
+---
+
+## 📦 Dependencies & Installation
+
+RustScribe requires several external tools to function properly:
+
+### 🔧 **System Dependencies**
+
+| Tool | Purpose | Installation |
+|------|---------|-------------|
+| **ffmpeg** | Audio/video processing | `apt install ffmpeg` (Ubuntu)<br/>`brew install ffmpeg` (macOS)<br/>`choco install ffmpeg` (Windows) |
+| **yt-dlp** | Download from YouTube/Twitter/X | `pip install yt-dlp`<br/>(requires Python 3.7+) |
+| **python3** | Runtime for yt-dlp | Usually pre-installed on Linux/macOS<br/>Download from python.org (Windows) |
+
+### 🦀 **Rust Toolchain** (for building from source)
+
+```bash
+# Install Rust (if not already installed)
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+source ~/.cargo/env
+
+# Verify installation
+rustc --version
+cargo --version
+```
+
+### ☁️ **AWS Setup**
+
+1. **Create an S3 bucket** for temporary audio storage:
+   ```bash
+   aws s3 mb s3://my-transcribe-cache --region us-east-1
+   ```
+
+2. **AWS Credentials** (choose one method):
+   - **Environment variables**: `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`
+   - **AWS CLI**: `aws configure`
+   - **Config file**: `~/.config/rustscribe/config.yaml`
+   - **IAM role** (for EC2/ECS)
+
+### 🛠️ **Quick Install Scripts**
+
+**Ubuntu/Debian:**
+```bash
+# System dependencies
+sudo apt update && sudo apt install -y ffmpeg python3 python3-pip
+
+# Python dependencies
+pip3 install yt-dlp
+
+# Rust (if needed)
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
+# RustScribe
+cargo install rustscribe
+```
+
+**macOS:**
+```bash
+# System dependencies (via Homebrew)
+brew install ffmpeg yt-dlp
+
+# Rust (if needed)
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
+# RustScribe
+cargo install rustscribe
+```
+
+**Windows (PowerShell as Administrator):**
+```powershell
+# System dependencies (via Chocolatey)
+choco install ffmpeg python yt-dlp
+
+# Rust (if needed)
+# Download and run rustup-init.exe from https://rustup.rs/
+
+# RustScribe
+cargo install rustscribe
+```
+
+### ✅ **Verify Installation**
+
+```bash
+# Check all dependencies
+ffmpeg -version
+yt-dlp --version
+python3 --version
+rustscribe --version
+
+# Test basic functionality
+rustscribe --help
+```
 
 ---
 

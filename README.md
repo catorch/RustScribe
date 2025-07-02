@@ -91,7 +91,8 @@ mkdir -p ~/.config/rustscribe && \
 cp config.example.yaml ~/.config/rustscribe/config.yaml
 $EDITOR ~/.config/rustscribe/config.yaml  # set AWS keys, region & S3 bucket
 
-# 3. transcribe something\ nrustscribe "https://youtu.be/dQw4w9WgXcQ" -o video.srt --timestamps
+# 3. transcribe something
+rustscribe "https://youtu.be/dQw4w9WgXcQ" -o video.srt --timestamps
 ```
 
 **Cost notice:** AWS offers 60 transcription minutes / month free for the first 12 months. After that it's about \$0.024 per audio‑minute.
